@@ -1,0 +1,38 @@
+{
+    "name": "Telegram bot",
+    "description": "A Normal Telegram Bot Which can download and upload files from txt file with extra features",
+    "keywords": ["Telegram","python", "Video","uploader"],
+    "repository": "https://github.com/MiyukiKun/txt-url-upload",
+    "success_url": "https://t.me/Portgas_D_ACEx",
+    "stack": "container",
+    "env": {
+        "API_ID": {
+            "description": "You api id, from my.telegram.org",
+            "value": ""
+        },
+        "API_HASH": {
+            "description": "You api hash, from my.telegram.org",
+            "value": ""
+        },
+        "BOT_TOKEN": {
+            "description": "Make a bot from @BotFather, and enter it's api token here.",
+            "value": ""
+        },
+        "OWNER": {
+            "description": "Get ur Id Of Telegram nd Paste Here.",
+            "value": ""
+        },
+        "SKELETON_URL": {
+            "description": "Put URL of your streaming app without the '/' at end",
+            "value": ""
+        },
+        "AUTH_GROUPS": {
+            "description": "ID of the Groups with a space in between",
+            "value": ""
+        },
+        "AUTH_USERS": {
+            "description": "ID of the Users with a space in between",
+            "value": ""
+        }
+    }
+}

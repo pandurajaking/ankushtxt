@@ -1,0 +1,4 @@
+telethon
+FastTelethonhelper
+requests
+yt-dlp
