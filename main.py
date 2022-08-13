@@ -5,8 +5,37 @@ import os
 import subprocess
 import helper
 from telethon.tl.types import DocumentAttributeVideo
-
-
+import requests
+import json
+import subprocess
+from pyrogram.types.messages_and_media import message
+from pyromod import listen
+from pyrogram.types import Message
+import tgcrypto
+import pyrogram
+from pyrogram import Client, filters
+from pyrogram.types.messages_and_media import message
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.errors import FloodWait
+import time
+import aiohttp
+import asyncio
+import aiofiles
+from pyrogram.types import User, Message
+from p_bar import progress_bar
+from subprocess import getstatusoutput
+import logging
+import sys
+import re
+import cloudscraper
+from bs4 import 
+bot = Client(
+    "CW",
+    bot_token=os.environ.get("BOT_TOKEN"),
+    api_id=int(os.environ.get("API_ID")),
+    api_hash=os.environ.get("API_HASH")
+)
+logger = logging.getLogger()
 cancel = False
 
 @bot.on(events.NewMessage(pattern="/start"))
