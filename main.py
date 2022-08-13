@@ -22,13 +22,10 @@ import aiohttp
 import asyncio
 import aiofiles
 from pyrogram.types import User, Message
-from p_bar import progress_bar
 from subprocess import getstatusoutput
 import logging
 import sys
 import re
-import cloudscraper
-from bs4 import 
 bot = Client(
     "CW",
     bot_token=os.environ.get("BOT_TOKEN"),
