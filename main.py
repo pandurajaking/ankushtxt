@@ -7,6 +7,7 @@ from telethon.tl.types import DocumentAttributeVideo
 import requests
 import json
 import subprocess
+import pyrogram
 from pyrogram.types.messages_and_media import message
 from pyromod import listen
 from pyrogram.types import Message
