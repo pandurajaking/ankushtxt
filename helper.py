@@ -1,5 +1,4 @@
 import json
-from config import skeleton_url
 import subprocess
 import datetime
 import asyncio
