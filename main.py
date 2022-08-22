@@ -5,7 +5,8 @@ import os
 import subprocess
 import helper
 from telethon.tl.types import DocumentAttributeVideo
-
+import pyrogram
+from pyrogram import Client, filters
 
 cancel = False
 
