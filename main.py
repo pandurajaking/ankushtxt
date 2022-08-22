@@ -24,7 +24,7 @@ bot = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
 cancel = False
 
 @bot.on_message(filters.command(["start"])& ~filters.edited)
-async def account_login(bot: Client, m: Message):
+async def account_login(bot: Client, event: Message):
 
     await event.reply("Hello!")
 
