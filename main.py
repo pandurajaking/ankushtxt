@@ -93,7 +93,7 @@ async def account_login(bot: Client, m: Message):
         os.remove(res)
     except Exception as e:
         print(e)
-        await event.reply("Invalid Json file input.")
+        await m.reply_text("Invalid Json file input.")
     try:
        with open(x, "r") as f:
         content = f.read()
