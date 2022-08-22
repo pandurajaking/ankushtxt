@@ -273,7 +273,5 @@ async def account_login(bot: Client, event: Message):
     await r.delete()   
 
 
-bot.start()
-
-bot.run_until_disconnected()
+bot.run()
 
