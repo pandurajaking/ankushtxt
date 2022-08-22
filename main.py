@@ -75,7 +75,7 @@ async def restart_handler(_, m):
     await m.reply_text("Restarted!", True)
     os.execl(sys.executable, sys.executable, *sys.argv)
 
-@bot.on_message(filters.command(["pyro"])& ~filters.edited)
+@bot.on_message(filters.command(["download"])& ~filters.edited)
 async def account_login(bot: Client, m: Message):
     editable = await m.reply_text("Send txt file**")
     input: Message = await bot.listen(editable.chat.id)
@@ -125,6 +125,7 @@ async def account_login(bot: Client, m: Message):
     input6 = message = await bot.listen(editable.chat.id)
     raw_text6 = input6.text
     thumb = input6.text
+    
     if thumb.startswith("http://") or thumb.startswith("https://"):
         getstatusoutput(f"wget '{thumb}' -O 'thumb.jpg'")
         thumb = "thumb.jpg"
@@ -134,7 +135,7 @@ async def account_login(bot: Client, m: Message):
     if raw_text =='0':
         count =1
     else:       
-        count =int(raw_text)    
+        count =int(raw_text) 
     try:
         for i in range(arg, len(links)):
             try:
@@ -143,6 +144,10 @@ async def account_login(bot: Client, m: Message):
                     return
                 url = links[i][1]
                 name = links[i][0].replace("\t", "")
+                Show = f"**Downloading:-**\n\n**Name :-** `{name}\nQuality - {raw_text2}`\n\n**Url :-** `{url}`\n\n"
+                prog = await m.reply_text(Show)
+                cc = f"**{count}) Title :** {name}\n\n**Quality :** {raw_text2}\n**Batch :** {raw_text0}\n**𝗗𝗼𝘄𝗻𝗹𝗼𝗮𝗱𝗲𝗱 𝗕𝘆 :** {raw_te}\n**𝗕𝗼𝘁 𝗢𝘄𝗻𝗲𝗿 : 𝗕𝗹𝗮𝗰𝗸𝗢𝘂𝗧 (•̪●)=︻╦̵̵̿╤── **\n**𝗣𝗹𝘇 𝗦𝘂𝗯𝘀𝗰𝗿𝗶𝗯𝗲 : https://www.youtube.com/channel/UC7udfRGdD_QoCg-OnSooGAA**"
+
                 filename = f"{name[:60]}.mp4"
                 r = await m.reply_text(f"`Downloading...\n{name[:60]}\n\nfile number: {i+1}`")
                 caption =  f"`{name[:60]}\n\nfile number: {i+1}`"
@@ -150,29 +155,23 @@ async def account_login(bot: Client, m: Message):
                 filename = k
                 res_file = await fast_upload(bot, filename, r)
                 subprocess.call(f'ffmpeg -i "{filename}" -ss 00:00:01 -vframes 1 "{filename}.jpg"', shell=True)
+                try:
+                    if thumb == "no":
+                        thumbnail = f"{filename}.jpg"
+                    else:
+                        thumbnail = thumb
+                except Exception as e:
+                    await m.reply_text(str(e))
                 thumbnail = f"{filename}.jpg"
                 dur = int(helper.duration(filename))
                 try:
-                    await bot.send_message(
-                        event.chat_id, 
-                        caption, 
-                        file=res_file, 
-                        force_document=False, 
-                        thumb=thumbnail, 
-                        supports_streaming=True, 
-                        attributes=[DocumentAttributeVideo(
-                            duration=dur, 
-                            w=1260, 
-                            h=720, 
-                            supports_streaming=True
-                        )]
-                    )
+                    await m.reply_video(event.chat_id, caption, file=res_file, force_document=False, thumb=thumbnail, supports_streaming=True, attributes=[DocumentAttributeVideo(duration=dur, w=1260, h=720, supports_streaming=True)])
                 except:
-                    await bot.send_message(
+                    await m.reply_video(
                         event.chat_id,
                         "There was an error while uploading file as streamable so, now trying to upload as document."
                     )
-                    await bot.send_message(
+                    await m.reply_video(
                         event.chat_id, 
                         caption, 
                         file=res_file, 
