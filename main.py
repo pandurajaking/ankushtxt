@@ -176,7 +176,8 @@ async def account_login(bot: Client, m: Message):
                         file=res_file, 
                         force_document=False, 
                         thumb=thumbnail, 
-                        supports_streaming=True, 
+                        supports_streaming=True,
+                        progress=progress_bar,progress_args=(reply,start_time),
                         attributes=[DocumentAttributeVideo(
                             duration=dur, 
                             w=1260, 
