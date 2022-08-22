@@ -83,20 +83,28 @@ async def account_login(bot: Client, m: Message):
 
     path = f"./downloads/"
 
-    try:    
-        with open(x, "r") as f:
+    try:
+        x = await m.get_reply_message()
+        json_file = await bot.download_media(x)
+        res, count = helper.parse_json_to_txt(json_file)
+        await event.reply(f"{count} links detected." ,file=res)
+        os.remove(json_file)
+        os.remove(res)
+    except Exception as e:
+        print(e)
+        await event.reply("Invalid Json file input.")
+    try:
+       with open(x, "r") as f:
             content = f.read()
         content = content.split("\n")
         links = []
         for i in content:
             links.append(i.split(":", 1))
         os.remove(x)
-        # print(len(links))
     except:
         await m.reply_text("Invalid file input.")
         os.remove(x)
         return
-
     editable = await m.reply_text(f"Total links found are **{len(links)}**\n\nSend From where you want to download initial is **0**")
     input1: Message = await bot.listen(editable.chat.id)
     raw_text = input1.text
