@@ -1,37 +1,209 @@
-from telethon import events, Button
-#from config import bot
-from FastTelethonhelper import fast_upload
-import os
-import subprocess
-import helper
-from telethon.tl.types import DocumentAttributeVideo
-import pyrogram
-from pyrogram.types import User, Message
-from pyrogram import Client, filters
+#  MIT License
+#
+#  Copyright (c) 2019-present Dan <https://github.com/delivrance>
+#
+#  Permission is hereby granted, free of charge, to any person obtaining a copy
+#  of this software and associated documentation files (the "Software"), to deal
+#  in the Software without restriction, including without limitation the rights
+#  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#  copies of the Software, and to permit persons to whom the Software is
+#  furnished to do so, subject to the following conditions:
+#
+#  The above copyright notice and this permission notice shall be included in all
+#  copies or substantial portions of the Software.
+#
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+#  SOFTWARE
 
+
+
+import requests
+import json
+import subprocess
+from pyrogram import Client,filters
+from pyrogram.types.messages_and_media import message
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.errors import FloodWait
+from pyromod import listen
+from pyrogram.types import Message
+import pyrogram
+from pyrogram import Client, filters
+import tgcrypto
+from p_bar import progress_bar
+from dotenv import load_dotenv
+from subprocess import getstatusoutput
+import helper
+import logging
+import time
+import aiohttp
+import asyncio
+import aiofiles
+from pyrogram.types import User, Message
+import sys
+import re
 import os
-from telethon import TelegramClient
-#API_ID = 14560088
-#API_HASH = "74a2665339484da3eaaed5f4fe16da79"
-#BOT_TOKEN = "5524381543:AAH-s7TDhvA_Ng2k9U5z9pvgiRPy5ChNve8"
-#api_id = os.environ.get('API_ID')
-#api_hash = os.environ.get('API_HASH')
-#bot_token = os.environ.get('BOT_TOKEN')
+
+load_dotenv()
+os.makedirs("./downloads", exist_ok=True)
 
 API_ID = int(os.environ.get("API_ID"))
 API_HASH = os.environ.get("API_HASH")
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
+NAME = os.environ.get("NAME")
 
 bot = Client("bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN, sleep_threshold=120)
 
-#bot = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
+with bot:
+    BOT = bot.get_me().username.lower()
 
-cancel = False
+auth_users = [ int(chat) for chat in os.environ.get("AUTH_USERS").split(",") if chat != '']
+sudo_users = auth_users
+print(sudo_users)
 
 @bot.on_message(filters.command(["start"])& ~filters.edited)
-async def account_login(bot: Client, event: Message):
+async def account_login(bot: Client, m: Message):
+    editable = await m.reply_text("Hello im txt file downloader\nPress /pyro to download links listed in a txt file in the format **Name:link**\n\nBot made by BlackOuT")
 
-    await event.reply("Hello!")
+@bot.on_message(filters.command(["cancel"]))
+async def cancel(_, m):
+    editable = await m.reply_text("Canceling All process Plz wait")
+    global cancel
+    cancel = True
+    await editable.edit("cancled")
+    return
+@bot.on_message(filters.command("restart"))
+async def restart_handler(_, m):
+    await m.reply_text("Restarted!", True)
+    os.execl(sys.executable, sys.executable, *sys.argv)
+
+@bot.on_message(filters.command(["pyro"])& ~filters.edited)
+async def account_login(bot: Client, m: Message):
+    editable = await m.reply_text("Send txt file**")
+    input: Message = await bot.listen(editable.chat.id)
+    x = await input.download()
+    await input.delete(True)
+
+    path = f"./downloads/"
+
+    try:    
+        with open(x, "r") as f:
+            content = f.read()
+        content = content.split("\n")
+        links = []
+        for i in content:
+            links.append(i.split(":", 1))
+        os.remove(x)
+        # print(len(links))
+    except:
+        await m.reply_text("Invalid file input.")
+        os.remove(x)
+        return
+
+    editable = await m.reply_text(f"Total links found are **{len(links)}**\n\nSend From where you want to download initial is **0**")
+    input1: Message = await bot.listen(editable.chat.id)
+    raw_text = input1.text
+
+
+    try:
+        arg = int(raw_text)
+    except:
+        arg = 0
+    
+    
+    editable = await m.reply_text("**Enter Batch Name**")
+    input0: Message = await bot.listen(editable.chat.id)
+    raw_text0 = input0.text
+    
+    editable7= await m.reply_text("**Downloaded By : **")
+    input7 = Message = await bot.listen(editable.chat.id)
+    raw_te = input7.text
+    
+    await m.reply_text("**Enter resolution**")
+    input2: Message = await bot.listen(editable.chat.id)
+    raw_text2 = input2.text
+
+    editable4= await m.reply_text("Now send the **Thumb url**\nEg : ```https://telegra.ph/file/d9e24878bd4aba05049a1.jpg```\n\nor Send **no**")
+    input6 = message = await bot.listen(editable.chat.id)
+    raw_text6 = input6.text
+    thumb = input6.text
+    if thumb.startswith("http://") or thumb.startswith("https://"):
+        getstatusoutput(f"wget '{thumb}' -O 'thumb.jpg'")
+        thumb = "thumb.jpg"
+    else:
+        thumb == "no"
+        
+    if raw_text =='0':
+        count =1
+    else:       
+        count =int(raw_text)    
+    try:
+        for i in range(arg, len(links)):
+            try:
+                if cancel == True:
+                    await m.reply_text("Process canceled")
+                     return
+                url = links[i][1]
+                name = links[i][0].replace("\t", "")
+                filename = f"{name[:60]}.mp4"
+                r = await m.reply_text(f"`Downloading...\n{name[:60]}\n\nfile number: {i+1}`")
+                caption =  f"`{name[:60]}\n\nfile number: {i+1}`"
+                k = await helper.download_video(url, filename)
+                filename = k
+                res_file = await fast_upload(bot, filename, r)
+                if not os.path.isfile("thumb.png"):
+                    subprocess.call(f'ffmpeg -i "{filename}" -ss 00:00:01 -vframes 1 "{filename}.jpg"', shell=True)
+                    thumbnail = f"{filename}.jpg"
+                else:
+                    thumbnail = "thumb.png"
+                dur = int(helper.duration(filename))
+                try:
+                    await bot.send_message(
+                        event.chat_id, 
+                        caption, 
+                        file=res_file, 
+                        force_document=False, 
+                        thumb=thumbnail, 
+                        supports_streaming=True, 
+                        attributes=[DocumentAttributeVideo(
+                            duration=dur, 
+                            w=1260, 
+                            h=720, 
+                            supports_streaming=True
+                        )]
+                    )
+                except:
+                    await bot.send_message(
+                        event.chat_id,
+                        "There was an error while uploading file as streamable so, now trying to upload as document."
+                    )
+                    await bot.send_message(
+                        event.chat_id, 
+                        caption, 
+                        file=res_file, 
+                        force_document=True,
+                    )
+                os.remove(filename)
+                os.remove(f"{filename}.jpg")
+                await r.delete()
+
+        
+            except Exception as e:
+                print(e)
+                pass
+        
+    except Exception as e:
+        await m.reply_text(str(e))
+    await m.reply_text("Done")
+bot.run()
+        
+        
+        
+
 
 @bot.on_message(filters.command(["sthumb"])& ~filters.edited)
 async def account_login(bot: Client, event: Message):
