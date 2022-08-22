@@ -55,12 +55,11 @@ async def _(event):
 
     global cancel
     cancel = False
-
+    txt_file = await event.get_reply_message()
+    x = await bot.download_media(txt_file)
     path = f"./downloads/"
     try:
-        txt_file = await event.get_reply_message()
-        x = await input.download(txt_file)
-        with open(x) as f:
+        with open(x, "r") as f:
             content = f.read()
         content = content.split("\n")
         links = []
