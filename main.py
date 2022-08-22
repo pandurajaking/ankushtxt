@@ -56,8 +56,8 @@ async def _(event):
     global cancel
     cancel = False
     editable = await event.reply("**Send txt file**")
-    input: Message = event.get_reply_message()
-    x = await input.download()
+ 
+    x =await bot.download_media()
     await input.delete(True)
 
     path = f"./downloads/"
