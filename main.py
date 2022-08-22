@@ -203,7 +203,7 @@ async def _(event):
     r = await event.reply("Trying to download....")
     data = event.data.decode('utf-8')
     data = data.split(":")
-    msg = await bot.get_messages(ids=event.message_id)
+    msg = await bot.get_messages(event.chat_id, ids=event.message_id)
     await msg.edit(buttons=None)
     msg = msg.raw_text.split("\n")
     file_name = msg[0].replace("Name: ", "")
