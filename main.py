@@ -34,7 +34,7 @@ from pyrogram.types import Message
 import pyrogram
 from pyrogram import Client, filters
 import tgcrypto
-from p_bar import progress_bar
+#from p_bar import progress_bar
 from dotenv import load_dotenv
 from subprocess import getstatusoutput
 import helper
