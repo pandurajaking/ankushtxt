@@ -58,12 +58,6 @@ NAME = os.environ.get("NAME")
 
 bot = Client("bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN, sleep_threshold=120)
 
-with bot:
-    BOT = bot.get_me().username.lower()
-
-auth_users = [ int(chat) for chat in os.environ.get("AUTH_USERS").split(",") if chat != '']
-sudo_users = auth_users
-print(sudo_users)
 
 @bot.on_message(filters.command(["start"])& ~filters.edited)
 async def account_login(bot: Client, m: Message):
