@@ -95,7 +95,7 @@ async def account_login(bot: Client, m: Message):
         await event.reply("Invalid Json file input.")
     try:
        with open(x, "r") as f:
-            content = f.read()
+        content = f.read()
         content = content.split("\n")
         links = []
         for i in content:
