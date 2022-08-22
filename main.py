@@ -149,11 +149,8 @@ async def account_login(bot: Client, m: Message):
                 k = await helper.download_video(url, filename)
                 filename = k
                 res_file = await fast_upload(bot, filename, r)
-                if not os.path.isfile("thumb.png"):
-                    subprocess.call(f'ffmpeg -i "{filename}" -ss 00:00:01 -vframes 1 "{filename}.jpg"', shell=True)
-                    thumbnail = f"{filename}.jpg"
-                else:
-                    thumbnail = "thumb.png"
+                subprocess.call(f'ffmpeg -i "{filename}" -ss 00:00:01 -vframes 1 "{filename}.jpg"', shell=True)
+                thumbnail = f"{filename}.jpg"
                 dur = int(helper.duration(filename))
                 try:
                     await bot.send_message(
