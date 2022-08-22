@@ -84,7 +84,8 @@ async def account_login(bot: Client, m: Message):
     path = f"./downloads/"
 
     try:
-        x = await m.get_reply_message("send json")
+        input2: Message = await bot.listen(editable.chat.id)
+        x =input2.text
         json_file = await bot.download_media(x)
         res, count = helper.parse_json_to_txt(json_file)
         await m.reply(f"{count} links detected." ,file=res)
