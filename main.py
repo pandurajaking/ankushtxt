@@ -7,6 +7,7 @@ import helper
 from telethon.tl.types import DocumentAttributeVideo
 import pyrogram
 from pyrogram import Client, filters
+from pyrogram.types import User, Message
 
 cancel = False
 
@@ -17,13 +18,9 @@ BOT_TOKEN = "5524381543:AAH-s7TDhvA_Ng2k9U5z9pvgiRPy5ChNve8"
 
 bot = Client("bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN, sleep_threshold=120)
 
-@bot.on(events.NewMessage(pattern="/start"))
-async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+
+@bot.on_message(filters.command(["start"])& ~filters.edited)
+async def account_login(bot: Client, m: Message):
     await event.reply("Hello!")
 
 
@@ -59,26 +56,17 @@ async def _(event):
         await event.reply("No default thumbnail set")
 
 
-@bot.on(events.NewMessage(pattern="/cancel"))
-async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+@bot.on_message(filters.command(["cancel"]))
+async def cancel(_, m):
+    editable = await m.reply_text("Canceling All process Plz wait")
     global cancel
     cancel = True
-    await event.reply("Trying to cancel all processes.")
+    await editable.edit("cancled")
     return
 
 
-@bot.on(events.NewMessage(pattern="/download"))
-async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+@bot.on_message(filters.command(["download"])& ~filters.edited)
+async def upload(bot: Client, m: Message):
     global cancel
     cancel = False
     try:
@@ -155,13 +143,8 @@ async def _(event):
             pass
           
           
-@bot.on(events.NewMessage(pattern="/upload"))
-async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+@bot.on_message(filters.command(["upload"])& ~filters.edited)
+async def upload(bot: Client, m: Message):
     arg = event.raw_text.split(" ", maxsplit = 1)[1]
     arg = arg.split("|")
     if len(arg) == 1:
@@ -201,14 +184,8 @@ async def _(event):
             buttons.append([Button.inline(i[1], data=f"id:{i[0]}")])
     await bot.send_message(event.chat_id, f"`Name: {file_name}`\n`Caption: {caption}`\n`Url: {arg[0]}`", buttons=buttons)
     
-
-@bot.on(events.NewMessage(pattern="/txt"))
-async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+@bot.on_message(filters.command(["txt"])& ~filters.edited)
+async def upload(bot: Client, m: Message):
     try:
         x = await event.get_reply_message()
         json_file = await bot.download_media(x)
@@ -221,13 +198,8 @@ async def _(event):
         await event.reply("Invalid Json file input.")
 
 
-@bot.on(events.NewMessage(pattern="/html"))
-async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+@bot.on_message(filters.command(["html"])& ~filters.edited)
+async def upload(bot: Client, m: Message):
     try:
         x = await event.get_reply_message()
         json_file = await bot.download_media(x)
