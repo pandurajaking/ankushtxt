@@ -55,10 +55,14 @@ async def _(event):
 
     global cancel
     cancel = False
-    txt_file = await event.get_reply_message()
-    x = await bot.download_media(txt_file)
+    editable = await event.reply("Send txt file**")
+    input: Message = await bot.listen(editable.chat.id)
+    x = await input.download()
+    await input.delete(True)
+
     path = f"./downloads/"
-    try:
+
+    try:    
         with open(x, "r") as f:
             content = f.read()
         content = content.split("\n")
@@ -66,6 +70,7 @@ async def _(event):
         for i in content:
             links.append(i.split(":", 1))
         os.remove(x)
+        # print(len(links))
     except:
         await event.reply("Invalid file input.")
         os.remove(x)
