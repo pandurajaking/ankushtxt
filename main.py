@@ -149,25 +149,21 @@ async def account_login(bot: Client, m: Message):
                 cc = f"**{count}) Title :** {name}\n\n**Quality :** {raw_text2}\n**Batch :** {raw_text0}\n**𝗗𝗼𝘄𝗻𝗹𝗼𝗮𝗱𝗲𝗱 𝗕𝘆 :** {raw_te}\n**𝗕𝗼𝘁 𝗢𝘄𝗻𝗲𝗿 : 𝗕𝗹𝗮𝗰𝗸𝗢𝘂𝗧 (•̪●)=︻╦̵̵̿╤── **\n**𝗣𝗹𝘇 𝗦𝘂𝗯𝘀𝗰𝗿𝗶𝗯𝗲 : https://www.youtube.com/channel/UC7udfRGdD_QoCg-OnSooGAA**"
 
                 filename = f"{name[:60]}.mp4"
-                r = await m.reply_text(f"`Downloading...\n{name[:60]}\n\nfile number: {i+1}`")
-                caption =  f"`{name[:60]}\n\nfile number: {i+1}`"
                 k = await helper.download_video(url, filename)
                 filename = k
-
-                r = await event.reply("Trying to download....")
-                data = event.data.decode('utf-8')
-                data = data.split(":")
-                msg = await bot.get_messages(event.chat_id, ids=event.message_id)
-                await msg.edit(buttons=None)
-                msg = msg.raw_text.split("\n")
-                file_name = msg[0].replace("Name: ", "")
-                caption = msg[1].replace("Caption: ", "")
-                url = msg[2].replace("Url: ", "") 
-                vid_id = (data[1])
                 filename = await helper.download_video(url, file_name, vid_id)
                 res_file = await fast_upload(bot, filename, r)
  
                 subprocess.call(f'ffmpeg -i "{filename}" -ss 00:00:01 -vframes 1 "{filename}.jpg"', shell=True)
+                reply = await m.reply_text(f"Uploading - ```{name}```")
+                try:
+                    if thumb == "no":
+                        thumbnail = f"{filename}.jpg"
+                    else:
+                        thumbnail = thumb
+                except Exception as e:
+                    await m.reply_text(str(e))
+
                 try:
                     dur = int(helper.duration(filename))
                     await bot.send_message(
@@ -290,11 +286,9 @@ async def account_login(bot: Client, event: Message):
             k = await helper.download_video(url, filename)
             filename = k
             res_file = await fast_upload(bot, filename, r)
-            if not os.path.isfile("thumb.png"):
-                subprocess.call(f'ffmpeg -i "{filename}" -ss 00:00:01 -vframes 1 "{filename}.jpg"', shell=True)
-                thumbnail = f"{filename}.jpg"
-            else:
-                thumbnail = "thumb.png"
+ 
+            subprocess.call(f'ffmpeg -i "{filename}" -ss 00:00:01 -vframes 1 "{filename}.jpg"', shell=True)
+
             dur = int(helper.duration(filename))
             try:
                 await bot.send_message(
