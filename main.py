@@ -61,7 +61,7 @@ bot = Client("bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN, sleep
 
 @bot.on_message(filters.command(["start"])& ~filters.edited)
 async def account_login(bot: Client, m: Message):
-    editable = await m.reply_text("Hello im txt file downloader\nPress /pyro to download links listed in a txt file in the format **Name:link**\n\nBot made by BlackOuT")
+    editable = await m.reply_text("Hello im txt file downloader\nPress /download to download links listed in a txt file in the format **Name:link**\n\nBot made by BlackOuT")
 
 @bot.on_message(filters.command(["cancel"]))
 async def cancel(_, m):
@@ -249,7 +249,7 @@ async def cancel(_, m):
     return
 
 
-@bot.on_message(filters.command(["download"])& ~filters.edited)
+@bot.on_message(filters.command(["download1"])& ~filters.edited)
 async def account_login(bot: Client, event: Message):
 
     global cancel
