@@ -21,11 +21,7 @@ async def _(event):
 
 @bot.on(events.NewMessage(pattern="/sthumb"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+
     x = await event.get_reply_message()
     thumb = await bot.download_media(x.photo)
     with open(thumb, "rb") as f:
@@ -53,11 +49,7 @@ async def _(event):
 
 @bot.on(events.NewMessage(pattern="/cancel"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+
     global cancel
     cancel = True
     await event.reply("Trying to cancel all processes.")
@@ -66,11 +58,7 @@ async def _(event):
 
 @bot.on(events.NewMessage(pattern="/download"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+
     global cancel
     cancel = False
     try:
@@ -149,11 +137,7 @@ async def _(event):
           
 @bot.on(events.NewMessage(pattern="/upload"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+    
     arg = event.raw_text.split(" ", maxsplit = 1)[1]
     arg = arg.split("|")
     if len(arg) == 1:
@@ -196,11 +180,7 @@ async def _(event):
 
 @bot.on(events.NewMessage(pattern="/txt"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+
     try:
         x = await event.get_reply_message()
         json_file = await bot.download_media(x)
@@ -215,11 +195,7 @@ async def _(event):
 
 @bot.on(events.NewMessage(pattern="/html"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+
     try:
         x = await event.get_reply_message()
         json_file = await bot.download_media(x)
