@@ -33,9 +33,8 @@ async def account_login(bot: Client, event: Message):
 
     await event.reply("Hello!")
 
-
-@bot.on(events.NewMessage(pattern="/sthumb"))
-async def _(event):
+@bot.on_message(filters.command(["sthumb"])& ~filters.edited)
+async def account_login(bot: Client, event: Message):
 
     x = await event.get_reply_message()
     thumb = await bot.download_media(x.photo)
@@ -46,33 +45,34 @@ async def _(event):
     await event.reply("Set as default thumbnail")
 
 
-@bot.on(events.NewMessage(pattern=("/cthumb")))
-async def _(event):
+@bot.on_message(filters.command(["cthumb"])& ~filters.edited)
+async def account_login(bot: Client, event: Message):
     with open("thumb.png", "w") as f:
         f.write("")
     os.remove("thumb.png")
     await event.reply("cleared thumbnail")
 
 
-@bot.on(events.NewMessage(pattern=("/vthumb")))
-async def _(event):
+@bot.on_message(filters.command(["vthumb"])& ~filters.edited)
+async def account_login(bot: Client, event: Message):
     try:
         await event.reply("current default thumbnail", file="thumb.png")
     except:
         await event.reply("No default thumbnail set")
 
 
-@bot.on(events.NewMessage(pattern="/cancel"))
-async def _(event):
 
+@bot.on_message(filters.command(["cancel"]))
+async def cancel(_, m):
+    editable = await m.reply_text("Canceling All process Plz wait")
     global cancel
     cancel = True
-    await event.reply("Trying to cancel all processes.")
+    await editable.edit("cancled")
     return
 
 
-@bot.on(events.NewMessage(pattern="/download"))
-async def _(event):
+@bot.on_message(filters.command(["download"])& ~filters.edited)
+async def account_login(bot: Client, event: Message):
 
     global cancel
     cancel = False
@@ -150,8 +150,8 @@ async def _(event):
             pass
           
           
-@bot.on(events.NewMessage(pattern="/upload"))
-async def _(event):
+@@bot.on_message(filters.command(["upload"])& ~filters.edited)
+async def account_login(bot: Client, event: Message):
     
     arg = event.raw_text.split(" ", maxsplit = 1)[1]
     arg = arg.split("|")
@@ -192,9 +192,8 @@ async def _(event):
             buttons.append([Button.inline(i[1], data=f"id:{i[0]}")])
     await bot.send_message(event.chat_id, f"`Name: {file_name}`\n`Caption: {caption}`\n`Url: {arg[0]}`", buttons=buttons)
     
-
-@bot.on(events.NewMessage(pattern="/txt"))
-async def _(event):
+@bot.on_message(filters.command(["txt"])& ~filters.edited)
+async def account_login(bot: Client, event: Message):
 
     try:
         x = await event.get_reply_message()
@@ -207,9 +206,8 @@ async def _(event):
         print(e)
         await event.reply("Invalid Json file input.")
 
-
-@bot.on(events.NewMessage(pattern="/html"))
-async def _(event):
+@bot.on_message(filters.command(["html"])& ~filters.edited)
+async def account_login(bot: Client, event: Message):
 
     try:
         x = await event.get_reply_message()
