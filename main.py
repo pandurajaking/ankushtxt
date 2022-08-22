@@ -260,7 +260,6 @@ async def upload(bot: Client, m: Message):
     await r.delete()   
 
 
-bot.start()
+bot.run()
 
-bot.run_until_disconnected()
 
