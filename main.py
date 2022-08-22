@@ -58,7 +58,7 @@ async def _(event):
 
     path = f"./downloads/"
     try:
-        txt_file = await event.get_reply_message()
+        txt_file = await event.get_reply_message("Send txt file")
         x = await bot.download_media(txt_file)
         with open(x) as f:
             content = f.read()
