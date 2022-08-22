@@ -24,11 +24,7 @@ cancel = False
 
 @bot.on(events.NewMessage(pattern="/start"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+
     await event.reply("Hello!")
 
 
