@@ -2,7 +2,7 @@ import os
 from telethon import TelegramClient
 api_id = 14560088
 api_hash = "74a2665339484da3eaaed5f4fe16da79"
-bot_token = "5524381543:AAH-s7TDhvA_Ng2k9U5z9pvgiRPy5ChNve8"
+bot_token = "5503878652:AAFPZWeZ0q_PAPub8JO3nOQxVCi5lmaGl3A"
 skeleton_url = ""
 auth_users = 1925020999
 auth_groups = -1001577326035
