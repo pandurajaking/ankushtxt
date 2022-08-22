@@ -1,5 +1,5 @@
 from telethon import events, Button
-from config import bot, auth_groups, auth_users
+from config import bot
 from FastTelethonhelper import fast_upload
 import os
 import subprocess
@@ -11,21 +11,11 @@ cancel = False
 
 @bot.on(events.NewMessage(pattern="/start"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
     await event.reply("Hello!")
 
 
 @bot.on(events.NewMessage(pattern="/sthumb"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
     x = await event.get_reply_message()
     thumb = await bot.download_media(x.photo)
     with open(thumb, "rb") as f:
@@ -53,11 +43,7 @@ async def _(event):
 
 @bot.on(events.NewMessage(pattern="/cancel"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+
     global cancel
     cancel = True
     await event.reply("Trying to cancel all processes.")
@@ -66,11 +52,7 @@ async def _(event):
 
 @bot.on(events.NewMessage(pattern="/download"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+
     global cancel
     cancel = False
     try:
@@ -149,11 +131,6 @@ async def _(event):
           
 @bot.on(events.NewMessage(pattern="/upload"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
     arg = event.raw_text.split(" ", maxsplit = 1)[1]
     arg = arg.split("|")
     if len(arg) == 1:
@@ -196,11 +173,6 @@ async def _(event):
 
 @bot.on(events.NewMessage(pattern="/txt"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
     try:
         x = await event.get_reply_message()
         json_file = await bot.download_media(x)
@@ -215,11 +187,6 @@ async def _(event):
 
 @bot.on(events.NewMessage(pattern="/html"))
 async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
     try:
         x = await event.get_reply_message()
         json_file = await bot.download_media(x)
@@ -236,7 +203,7 @@ async def _(event):
     r = await event.reply("Trying to download....")
     data = event.data.decode('utf-8')
     data = data.split(":")
-    msg = await bot.get_messages(event.chat_id, ids=event.message_id)
+    msg = await bot.get_messages(ids=event.message_id)
     await msg.edit(buttons=None)
     msg = msg.raw_text.split("\n")
     file_name = msg[0].replace("Name: ", "")
@@ -253,7 +220,6 @@ async def _(event):
     try:
         dur = int(helper.duration(filename))
         await bot.send_message(
-            event.chat_id, 
             f"{caption}", 
             file=res_file, 
             force_document=False, 
@@ -269,11 +235,9 @@ async def _(event):
 
     except:
         await bot.send_message(
-            event.chat_id,
             "There was an error while uploading file as streamable so, now trying to upload as document."
         )
         await bot.send_message(
-            event.chat_id, 
             f"`{caption}`", 
             file=res_file, 
             force_document=True,
