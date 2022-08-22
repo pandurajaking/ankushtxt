@@ -219,9 +219,8 @@ async def account_login(bot: Client, event: Message):
     except Exception:
         await event.reply("Invalid Json file input.")
 
-
-@bot.on(events.CallbackQuery(pattern=b"id:"))
-async def _(event):
+@bot.on_message(events.CallbackQuery(pattern=b"id:"))
+async def account_login(bot: Client, event: Message):
     r = await event.reply("Trying to download....")
     data = event.data.decode('utf-8')
     data = data.split(":")
