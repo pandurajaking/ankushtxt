@@ -153,39 +153,58 @@ async def account_login(bot: Client, m: Message):
                 caption =  f"`{name[:60]}\n\nfile number: {i+1}`"
                 k = await helper.download_video(url, filename)
                 filename = k
+
+                r = await event.reply("Trying to download....")
+                data = event.data.decode('utf-8')
+                data = data.split(":")
+                msg = await bot.get_messages(event.chat_id, ids=event.message_id)
+                await msg.edit(buttons=None)
+                msg = msg.raw_text.split("\n")
+                file_name = msg[0].replace("Name: ", "")
+                caption = msg[1].replace("Caption: ", "")
+                url = msg[2].replace("Url: ", "") 
+                vid_id = (data[1])
+                filename = await helper.download_video(url, file_name, vid_id)
                 res_file = await fast_upload(bot, filename, r)
+ 
                 subprocess.call(f'ffmpeg -i "{filename}" -ss 00:00:01 -vframes 1 "{filename}.jpg"', shell=True)
                 try:
-                    if thumb == "no":
-                        thumbnail = f"{filename}.jpg"
-                    else:
-                        thumbnail = thumb
-                except Exception as e:
-                    await m.reply_text(str(e))
-                thumbnail = f"{filename}.jpg"
-                dur = int(helper.duration(filename))
-                try:
-                    await m.reply_video(event.chat_id, caption, file=res_file, force_document=False, thumb=thumbnail, supports_streaming=True, attributes=[DocumentAttributeVideo(duration=dur, w=1260, h=720, supports_streaming=True)])
-                except:
-                    await m.reply_video(
-                        event.chat_id,
-                        "There was an error while uploading file as streamable so, now trying to upload as document."
-                    )
-                    await m.reply_video(
+                    dur = int(helper.duration(filename))
+                    await bot.send_message(
                         event.chat_id, 
-                        caption, 
+                        f"{caption}", 
                         file=res_file, 
-                        force_document=True,
+                        force_document=False, 
+                        thumb=thumbnail, 
+                        supports_streaming=True, 
+                        attributes=[DocumentAttributeVideo(
+                            duration=dur, 
+                            w=1260, 
+                            h=720, 
+                            supports_streaming=True
+                        )]
                     )
+
+                except:
+                    await bot.send_message(
+                        event.chat_id,
+                        "There was an error while uploading file as streamable so, now trying to upload as document.")
+                await bot.send_message(
+                    event.chat_id, 
+                    f"`{caption}`", 
+                    file=res_file, 
+                    force_document=True,
+                )
+
                 os.remove(filename)
                 os.remove(f"{filename}.jpg")
-                await r.delete()
 
+                await r.delete()   
         
             except Exception as e:
                 print(e)
                 pass
-        
+          
     except Exception as e:
         await m.reply_text(str(e))
     await m.reply_text("Done")
