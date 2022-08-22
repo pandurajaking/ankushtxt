@@ -9,6 +9,13 @@ from telethon.tl.types import DocumentAttributeVideo
 
 cancel = False
 
+API_ID = 14560088
+API_HASH = "74a2665339484da3eaaed5f4fe16da79"
+BOT_TOKEN = "5524381543:AAH-s7TDhvA_Ng2k9U5z9pvgiRPy5ChNve8"
+
+
+bot = Client("bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN, sleep_threshold=120)
+
 @bot.on(events.NewMessage(pattern="/start"))
 async def _(event):
     if event.is_private:
