@@ -1,5 +1,5 @@
 from telethon import events, Button
-from config import bot, auth_groups, auth_users
+#from config import bot, auth_groups, auth_users
 from FastTelethonhelper import fast_upload
 import os
 import subprocess
