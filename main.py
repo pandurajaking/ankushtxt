@@ -5,8 +5,9 @@ import os
 import subprocess
 import helper
 from telethon.tl.types import DocumentAttributeVideo
-
-
+import pyrogram
+from pyrogram.types import User, Message
+from pyrogram import Client, filters
 
 import os
 from telethon import TelegramClient
@@ -22,8 +23,8 @@ bot = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
 
 cancel = False
 
-@bot.on(events.NewMessage(pattern="/start"))
-async def _(event):
+@bot.on_message(filters.command(["start"])& ~filters.edited)
+async def account_login(bot: Client, m: Message):
 
     await event.reply("Hello!")
 
