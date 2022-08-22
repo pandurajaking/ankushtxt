@@ -24,13 +24,8 @@ async def account_login(bot: Client, m: Message):
     await event.reply("Hello!")
 
 
-@bot.on(events.NewMessage(pattern="/sthumb"))
-async def _(event):
-    if event.is_private:
-        if event.sender_id not in auth_users:
-            return
-    elif event.chat_id not in auth_groups:
-        return
+@bot.on_message(filters.command(["sthumb"])& ~filters.edited)
+async def upload(bot: Client, m: Message):
     x = await event.get_reply_message()
     thumb = await bot.download_media(x.photo)
     with open(thumb, "rb") as f:
@@ -40,16 +35,16 @@ async def _(event):
     await event.reply("Set as default thumbnail")
 
 
-@bot.on(events.NewMessage(pattern=("/cthumb")))
-async def _(event):
+@bot.on_message(filters.command(["cthumb"])& ~filters.edited)
+async def upload(bot: Client, m: Message):
     with open("thumb.png", "w") as f:
         f.write("")
     os.remove("thumb.png")
     await event.reply("cleared thumbnail")
 
 
-@bot.on(events.NewMessage(pattern=("/vthumb")))
-async def _(event):
+@bot.on_message(filters.command(["vthumb"])& ~filters.edited)
+async def upload(bot: Client, m: Message):
     try:
         await event.reply("current default thumbnail", file="thumb.png")
     except:
