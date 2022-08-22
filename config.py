@@ -8,5 +8,5 @@ api_hash = os.environ.get('API_HASH')
 bot_token = os.environ.get('BOT_TOKEN')
 
 
-bot = TelegramClient("bot", api_id, api_hash,bot_token)
+bot = TelegramClient("bot", api_id = API_ID, api_hash = API_HASH,bot_token = BOT_TOKEN)
 
