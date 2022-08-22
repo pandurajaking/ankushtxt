@@ -220,6 +220,7 @@ async def _(event):
     try:
         dur = int(helper.duration(filename))
         await bot.send_message(
+            event.chat_id,
             f"{caption}", 
             file=res_file, 
             force_document=False, 
