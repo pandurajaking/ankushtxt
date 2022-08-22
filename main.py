@@ -150,7 +150,7 @@ async def account_login(bot: Client, event: Message):
             pass
           
           
-@@bot.on_message(filters.command(["upload"])& ~filters.edited)
+@bot.on_message(filters.command(["upload"])& ~filters.edited)
 async def account_login(bot: Client, event: Message):
     
     arg = event.raw_text.split(" ", maxsplit = 1)[1]
