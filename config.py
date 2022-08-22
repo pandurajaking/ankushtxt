@@ -1,5 +1,6 @@
 import os
 from telethon import TelegramClient
+from pyrogram import Client, filters
 API_ID = 14560088
 API_HASH = "74a2665339484da3eaaed5f4fe16da79"
 BOT_TOKEN = "5524381543:AAH-s7TDhvA_Ng2k9U5z9pvgiRPy5ChNve8"
