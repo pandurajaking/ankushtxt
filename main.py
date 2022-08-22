@@ -182,15 +182,13 @@ async def account_login(bot: Client, m: Message):
                     )
 
                 except:
+                    await bot.send_message(event.chat_id,"There was an error while uploading file as streamable so, now trying to upload as document.")
                     await bot.send_message(
-                        event.chat_id,
-                        "There was an error while uploading file as streamable so, now trying to upload as document.")
-                await bot.send_message(
-                    event.chat_id, 
-                    f"`{caption}`", 
-                    file=res_file, 
-                    force_document=True,
-                )
+                        event.chat_id, 
+                        f"`{caption}`", 
+                        file=res_file, 
+                        force_document=True,
+                    )
 
                 os.remove(filename)
                 os.remove(f"{filename}.jpg")
@@ -204,10 +202,7 @@ async def account_login(bot: Client, m: Message):
     except Exception as e:
         await m.reply_text(str(e))
     await m.reply_text("Done")
-bot.run()
-        
-        
-        
+
 
 
 @bot.on_message(filters.command(["sthumb"])& ~filters.edited)
